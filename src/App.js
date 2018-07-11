@@ -23,6 +23,7 @@ const MainContainer = styled.div`
   min-height: 100vh;
   align-items: center;
   min-width: 1240px;
+  margin-bottom: 800px;
 `
 
 const LeftSection = styled.div`

@@ -90,13 +90,11 @@ const SlidersWrapper = styled.div`
 `
 
 const ColorCodesSection = styled.div`
-  border-left: 1px solid rgba(0,0,0,.1);
   margin-left: ${wheelRadius + 244 + 96}px;
   padding-left: 48px;
   font-size: 16px;
   line-height: 24px;
-  position: relative;
-  display: flex;
+  position: absolute;
 `
 
 class WheelItem extends Component {
@@ -435,23 +433,51 @@ class WheelItem extends Component {
           </SlidersContainer>
         )}
 
-        <ColorCodesSection style={{ top: `-100px` }}>
-          <div onMouseOver={this.handleColorCodeHover} onMouseOut={this.handleColorCodeHover}>{colorString.to.hex(Color(this.props.color).saturate(this.state.saturationValue).desaturate(this.state.desaturationValue).lighten(this.state.lightenValue).darken(this.state.darkenValue).rgb().round().array())}</div>
+        <ColorCodesSection style={{ top: this.props.orderNumber * 40 }}>
+          <div style={{ height: 40 }} onMouseOver={this.handleColorCodeHover} onMouseOut={this.handleColorCodeHover}>
+            <div style={{
+              width: 32,
+              height: 32,
+              borderRadius: 3,
+              position: 'absolute',
+              left: 0,
+              background: Color(this.props.color).saturate(this.state.saturationValue).desaturate(this.state.desaturationValue).lighten(this.state.lightenValue).darken(this.state.darkenValue) }}
+            />
+            {colorString.to.hex(Color(this.props.color).saturate(this.state.saturationValue).desaturate(this.state.desaturationValue).lighten(this.state.lightenValue).darken(this.state.darkenValue).rgb().round().array())}
+          </div>
 
-          {this.state.showSecColor && (<span>&nbsp;+&nbsp;</span>)}
-
-          {this.state.showSecColor && colorString.to.hex(Color(this.props.color).saturate(this.state.secSaturationValue).desaturate(this.state.secDesaturationValue).lighten(this.state.secLightenValue).darken(this.state.secDarkenValue).rgb().round().array())}
+          {this.state.showSecColor && (
+            <div style={{ height: 40, whiteSpace: 'nowrap', marginTop: -20 }}>
+              <div style={{
+                width: 32,
+                height: 32,
+                borderRadius: 3,
+                position: 'absolute',
+                left: -40,
+                background: Color(this.props.color).saturate(this.state.secSaturationValue).desaturate(this.state.secDesaturationValue).lighten(this.state.secLightenValue).darken(this.state.secDarkenValue) }}
+              />
+              {'+ ' + colorString.to.hex(Color(this.props.color).saturate(this.state.secSaturationValue).desaturate(this.state.secDesaturationValue).lighten(this.state.secLightenValue).darken(this.state.secDarkenValue).rgb().round().array())}
+            </div>
+          )}
         </ColorCodesSection>
       </WheelItemWrapper>
     )
   }
 }
 
+const order = [
+  1, 2, 3, 18, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 4, 19, 20, 21
+]
+
 const Wheel = ({ colorsList, colorsAmount }) => (
   <WheelWrapper>
-    {colorsList.map((colorsListItem, index) => (
-      <WheelItem rotateAngle={index * 360 / colorsAmount} color={colorsListItem} colorsAmount={colorsAmount} key={index} />
-    ))}
+    {colorsList.map((colorsListItem, index) => {
+      console.log(order[index])
+
+      return (
+        <WheelItem index={index} orderNumber={order[index]} rotateAngle={index * 360 / colorsAmount} color={colorsListItem} colorsAmount={colorsAmount} key={index} />
+      )
+    })}
   </WheelWrapper>
 )
 
